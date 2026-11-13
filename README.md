@@ -1,181 +1,129 @@
-# 📱 Phone pe Android App banao — Termux + OpenCode
+📱 Build Android Apps on Your Phone — Termux + OpenCode
+Without a laptop, using only your phone: Let OpenCode (AI) write your app and build the APK directly on your phone. One script, Termux only — no Ubuntu required.
+
+Requirements: Android 7+, a phone with 6 GB+ RAM, ~4 GB free storage, WiFi (~1 GB download).
+
+Step 0: Install Termux
+⚠️ Do not download the Play Store version — it's outdated!
+** Download Termux Here **👇 . Download Termux
+
+** Install Code Editor ** Download Code Editor
+
+Step 1: Run the Setup Script
+Open Termux and run these two commands:
 
 
-Bina laptop, sirf phone se: **OpenCode (AI) se app likhwao aur phone pe hi APK banao.**
-Ek script, sirf Termux — koi Ubuntu nahi.
-
-**Zaroorat:** Android 7+, 6 GB+ RAM wala phone, ~4 GB khali jagah, WiFi (~1 GB download).
-
----
-
-## Step 0: Termux Install Karo
-
-> ⚠️ **Play Store wala mat lena — outdated hai!**
-
-** Termux Yaha se install karo **👇 
-. [Download Termux](https://github.com/HunterisLive-1/Turmux-setup/releases/download/V1.1/Termux.apk)
-
-** Code editor install **
- [Download Code-editor](https://github.com/HunterisLive-1/Turmux-setup/releases/download/V1.1/Code.Editor.apk)
-
----
-
-## Step 1: Setup Script Chalao
-
-Termux kholo aur ye do command chalao:
-
-```bash
+bash
 curl -LO https://raw.githubusercontent.com/HunterisLive-1/Turmux-setup/main/hunter.sh
-```
 
-```bash
+bash
 bash hunter.sh
-```
+It will ask for a name → For the terminal banner (e.g., Hunter)
+A storage permission popup will appear → Tap Allow
+Time: ~10-15 minutes. No questions will be asked in between.
+If something fails, the script will display the name of the failed component — run bash hunter.sh again, and completed steps will be skipped.
+This installs:
 
-- Naam poochega → banner ke liye (jaise: Hunter)
-- Storage ka popup aayega → **Allow**
-- Time: ~10-15 min. Beech mein koi sawaal nahi aata.
-- Kuch fail hua to script naam ke saath batata hai — `bash hunter.sh` dobara chalao, jo ho chuka hai wo skip hoga.
 
-Ye install karta hai:
+What	Why
+OpenCode (+ glibc-runner)	To write code using AI (including free models)
+Java 17 + Gradle	To build APKs
+Android SDK 35	Android libraries
+aapt2, apksigner (phone-compatible versions)	Google's standard versions do not work on phones
+zsh + p10k + rainbow banner	Beautiful terminal appearance
+At the end, a test app will be created: Download/hello-hunter.apk — Open it using the Files app and install it. The screen will display: "This app was built directly on a phone!"
 
-| Kya | Kyun |
-|:----|:-----|
-| OpenCode (+ glibc-runner) | AI se code likhwane ke liye (free models bhi) |
-| Java 17 + Gradle | APK build ke liye |
-| Android SDK 35 | Android ki library |
-| aapt2, apksigner (phone wale) | Google wale phone pe nahi chalte |
-| zsh + p10k + rainbow banner | Sundar terminal |
+After everything is complete, close Termux and reopen it.
 
-Aakhir mein ek test app banta hai: **Download/hello-hunter.apk** — Files app se kholo, install karo. Screen pe likha aayega: *"Ye app phone pe hi bana hai!"*
+Step 2: Create an App Using OpenCode
+Open the test project in Termux:
 
-**Ho jaane ke baad Termux band karke kholo.**
 
----
-
-## Step 2: OpenCode se App Banwao
-
-Test project mein OpenCode kholo:
-
-```bash
+bash
 cd ~/hello-hunter
-```
 
-```bash
+bash
 opencode
-```
+The first time, type /models and select a free model (with -free at the end of its name, e.g., deepseek-v4.1-flash-free) — no API key required. If you want to use your own API key, run opencode auth login outside OpenCode.
 
-Pehli baar `/models` likho aur koi **free** model chuno (naam ke aakhir mein `-free`, jaise `deepseek-v4.1-flash-free`) — API key nahi chahiye. Apni key lagani ho to bahar `opencode auth login`. Phir OpenCode ko bolo, jaise:
+Then tell OpenCode what you want to build, for example:
 
-```
-Is project mein ek simple calculator app bana do. Sirf MainActivity.kt badlo, koi nayi library mat jodna.
-```
 
----
+Create a simple calculator app in this project. Only modify MainActivity.kt, do not add any new libraries.
+Step 3: Build and Install the APK
+Exit OpenCode and run:
 
-## Step 3: APK Banao aur Install Karo
 
-OpenCode se bahar aake:
-
-```bash
+bash
 ./gradlew assembleDebug
-```
 
-```bash
+bash
 cp app/build/outputs/apk/debug/app-debug.apk /sdcard/Download/
-```
+Files app → Download → app-debug.apk → Install.
 
-Files app → Download → **app-debug.apk** → Install.
+New project? To add gradlew to its folder, run:
 
-**Naya project?** Uske folder mein `gradlew` daalne ke liye:
 
-```bash
+bash
 addwrapper
-```
+Setup for Building APKs Only (Without zsh / OpenCode)
+If you only need Java + Android SDK (for example, to build apps using Maya), this single command will do the job. It won't ask any questions:
 
----
 
-## Sirf APK Banane Ka Setup (bina zsh / OpenCode)
-
-Sirf Java + Android SDK chahiye (jaise Maya se app banwane ke liye)? Ye ek command, koi sawaal nahi poochti:
-
-```bash
+bash
 curl -sL https://raw.githubusercontent.com/HunterisLive-1/Turmux-setup/main/android-setup.sh | bash
-```
+If ANDROID_SETUP_OK appears at the end, you're ready.
 
-Aakhir mein `ANDROID_SETUP_OK` aaye to ready.
+🎨 Want to Change the Look?
+The script installs The Hunter Ai's p10k look. Choose your own style:
 
----
 
-## 🎨 Look Badalna Ho
-
-Script The Hunter Ai wala p10k look lagata hai. Apna look chuno:
-
-```bash
+bash
 p10k configure
-```
+⚡ Aliases
 
----
+Alias	Function
+c	Clear the screen
+update	Update everything
+coding	Open the /sdcard/coding folder
+addwrapper	Add gradlew to a project
+🔧 Troubleshooting
+❌ Long yellow "instant prompt" warning when opening Termux
+The latest hunter.sh automatically disables it. If you have an older setup:
 
-## ⚡ Aliases
 
-| Alias | Kaam |
-|:------|:-----|
-| `c` | Screen saaf |
-| `update` | Sab update karo |
-| `coding` | `/sdcard/coding` folder |
-| `addwrapper` | Project mein `gradlew` daalo |
-
----
-
-## 🔧 Troubleshooting
-
-### ❌ Termux kholte hi upar lamba peela "instant prompt" warning
-
-Naya `hunter.sh` ise khud band karta hai. Purana setup ho to:
-
-```bash
+bash
 echo 'typeset -g POWERLEVEL9K_INSTANT_PROMPT=off' >> ~/.zshrc
-```
+Then close Termux and reopen it.
 
-Phir Termux band karke kholo.
+❌ "File has unexpected size ... Mirror sync in progress?" during pkg update
+hunter.sh automatically sets the default mirror. To do it manually:
 
-### ❌ pkg update pe "File has unexpected size ... Mirror sync in progress?"
 
-`hunter.sh` khud default mirror lagata hai. Haath se:
-
-```bash
+bash
 termux-change-repo
-```
+Select "Single mirror" → Choose "default".
 
-"Single mirror" → "default" chuno.
+❌ Gradle: "AAPT2 ... Daemon startup failed"
+Gradle downloads the PC version of aapt2, which does not work on phones. Check:
 
-### ❌ Gradle: "AAPT2 ... Daemon startup failed"
 
-Gradle PC wala aapt2 download karta hai jo phone pe nahi chalta. Check karo:
-
-```bash
+bash
 cat ~/.gradle/gradle.properties
-```
+It should contain the android.aapt2FromMavenOverride= line. If it's missing, run bash hunter.sh again.
 
-Isme `android.aapt2FromMavenOverride=` wali line honi chahiye. Na ho to `bash hunter.sh` dobara chalao.
+❌ ./gradlew: No such file or directory
+The project does not have gradlew. Run this inside the project folder:
 
-### ❌ `./gradlew: No such file or directory`
 
-Project mein `gradlew` nahi hai. Project folder mein:
-
-```bash
+bash
 addwrapper
-```
+❌ Build is very slow / Phone gets hot
+The first build taking 3-5 minutes is normal (everything is being downloaded). Keep other apps closed. 6 GB+ RAM is recommended.
 
-### ❌ Build bahut slow / phone garam
+❌ P10k icons are broken
+Close Termux and reopen it (the font needs to load). If the problem persists, choose "No" for icons in:
 
-Pehla build 3-5 min normal hai (sab download hota hai). Baaki apps band rakho. 6 GB+ RAM best.
 
-### ❌ P10k icons broken dikhte hain
-
-Close Termux And Reopen (font lagta hai). Phir bhi ho to `p10k configure` mein icons ke liye "No" chuno.
-
----
-
-ata ke deho hindi te achhe ota english koro aar kono code jeno kharap na hoi
+bash
+p10k configure
